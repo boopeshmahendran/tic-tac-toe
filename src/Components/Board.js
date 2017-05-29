@@ -44,9 +44,20 @@ class Board extends Component {
     if (gameOverState)  {
       this.setState({
         winner
-      })
+      }, this.storeStats)
     }
     return gameOverState
+  }
+  storeStats() {
+    let stats = JSON.parse(localStorage.getItem('stats')) || {}
+    if (this.state.isComputerPlaying) {
+      if (!stats['computer']) stats['computer'] = {}
+      stats['computer'][this.state.winner] = (stats['computer'][this.state.winner] + 1) || 1
+    } else {
+      if (!stats['2players']) stats['2players'] = {}
+      stats['2players'][this.state.winner] = (stats['2players'][this.state.winner] + 1) || 1
+    }
+    localStorage.setItem('stats', JSON.stringify(stats))
   }
   playerMove(pos) {
     if (this.state.board[pos])
